@@ -1,0 +1,16 @@
+# Carpetas de compilación
+bin/
+obj/
+
+# Archivos de usuario de Visual Studio
+*.user
+*.suo
+*.vscode/
+*.vs/
+
+# Rider
+.idea/
+
+# Windows
+Thumbs.db
+Desktop.ini
