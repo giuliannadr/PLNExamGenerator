@@ -3,7 +3,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Anton&family=Gloria+Hallelujah&family=Inria+Sans:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Jura:wght@300..700&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto+Slab:wght@100..900&family=Shadows+Into+Light+Two&family=Walter+Turncoat&display=swap');
 
 body.bg-gradient {
-    background: radial-gradient(circle at center, #070087 0%, #1A1A1F 100%) !important;
+    background: radial-gradient(circle at center, #070087 20%, #1A1A1F 80%) !important;
     color: #fff !important;
    
     margin: 0 !important;
@@ -16,9 +16,10 @@ body.bg-gradient {
     justify-content: space-between;
     flex-direction: row;
     align-items: center;
-    padding: 1rem 0rem;
+    padding: 1.5rem 0rem;
     background: rgba(0,0,0,0.4);
     width: 100%;
+    border-radius: 0 0 30px 30px  ;
 }
 .container-fluid {
  
@@ -110,21 +111,34 @@ body.bg-gradient {
         font-family: 'Istok Web', sans-serif !important;
         font-size: 1.5rem
     }
-.upload-box {
+.upload {
+    border-radius: 16px;
+    background: #2549A6;
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-width: 410px; /* 5px más que upload-box */
+    margin: 0 auto; /* centra upload en la página */
     margin-top: 2rem;
+}
+.upload-box {
+   
     padding: 2rem;
     border: 2px dashed #4dabf7;
     border-radius: 16px;
-    background: rgba(20,20,60,0.6);
+    background: #2549A6;
     max-width: 400px;
     margin-left: auto;
     margin-right: auto;
     transition: box-shadow .3s;
     font-family: 'Istok Web', sans-serif !important;
 }
-.upload-box p{
-    font-size: 1rem;
-}
+    .upload-box p {
+        font-size: 1rem;
+        font-weight: bolder;
+        color: #BEC4FA;
+    }
 
     .upload-box:hover {
         box-shadow: 0 0 20px #4dabf7;
@@ -147,3 +161,13 @@ body.bg-gradient {
     .upload-btn:hover {
         background: #339af0;
     }
+
+.crear-examen {
+    background-color: #2a00ff;
+    margin-left: 8px;
+    border: none;
+}
+.crear-examen:hover {
+    background: #070087;
+    border: none;
+}
