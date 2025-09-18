@@ -1,5 +1,6 @@
 ﻿@{
     Layout = null;
+    bool isLoggedIn = User.Identity.IsAuthenticated;
 }
 <!DOCTYPE html>
 <html lang="es">
@@ -9,18 +10,16 @@
     <title>@ViewBag.Title - ExamGenerator</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-   
 </head>
 <body class="bg-gradient">
     <header class="topbar">
         <div class="container-fluid">
             <div class="logo">
                 <span class="brand">ExamGenerator</span>
-                <span class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 256 256"><path fill="#BEC4FA" d="M216 40H40a16 16 0 0 0-16 16v160a8 8 0 0 0 11.58 7.16L64 208.94l28.42 14.22a8 8 0 0 0 7.16 0L128 208.94l28.42 14.22a8 8 0 0 0 7.16 0L192 208.94l28.42 14.22A8 8 0 0 0 232 216V56a16 16 0 0 0-16-16m0 163.06l-20.42-10.22a8 8 0 0 0-7.16 0L160 207.06l-28.42-14.22a8 8 0 0 0-7.16 0L96 207.06l-28.42-14.22a8 8 0 0 0-7.16 0L40 203.06V56h176Zm-155.58-35.9a8 8 0 0 0 10.74-3.58L76.94 152h38.12l5.78 11.58a8 8 0 1 0 14.32-7.16l-32-64a8 8 0 0 0-14.32 0l-32 64a8 8 0 0 0 3.58 10.74M96 113.89L107.06 136H84.94ZM136 128a8 8 0 0 1 8-8h16v-16a8 8 0 0 1 16 0v16h16a8 8 0 0 1 0 16h-16v16a8 8 0 0 1-16 0v-16h-16a8 8 0 0 1-8-8" /></svg></span>
             </div>
             <nav class="nav-actions">
-                <a class="plus-btn" href="#">Plus <span><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><path fill="none" stroke="#BEC4FA" stroke-width="2" d="M12 18V8zm0 5c6.075 0 11-4.925 11-11S18.075 1 12 1S1 5.925 1 12s4.925 11 11 11Zm5-11l-5-5l-5 5" /></svg></span></a>
-                <a class="register-btn" href="#">Registrate</a>
+                <a class="plus-btn" href="#">Plus <span><!-- svg aquí --></span></a>
+                <a class="register-btn" href="#">Mi Cuenta</a>
             </nav>
         </div>
     </header>
@@ -28,5 +27,101 @@
     <main class="main-content">
         @RenderBody()
     </main>
+
+
+
+    <!-- Overlay -->
+    <div id="overlay" class="overlay"></div>
+
+    <!-- Popup login/registro -->
+    <div id="authPopup" class="popup">
+        <button class="close-btn" onclick="cerrarPopup()">✕</button>
+        <h3 id="popupTitle">Inicia sesión</h3>
+        <div class="card-container">
+            <div class="card">
+                <form id="loginForm" class="card-face front" action="/Account/Login" method="post">
+                    <input type="email" name="email" placeholder="Email" />
+                    <input type="password" name="pass" placeholder="Contraseña" />
+                    <button type="submit" class="submit-btn">Ingresar</button>
+                </form>
+                <form id="registerForm" class="card-face back" action="/Account/Register" method="post">
+                    <input type="text" name="name" placeholder="Nombre completo" />
+                    <input type="email" name="email" placeholder="Email" />
+                    <input type="password" name="pass" placeholder="Contraseña" />
+                    <input type="password" name="confirmPass" placeholder="Confirmar contraseña" />
+                    <button type="submit" class="submit-btn">Registrarse</button>
+                </form>
+            </div>
+        </div>
+        <a href="#" id="toggleForm" class="register-link">¿No tienes cuenta? Registrate</a>
+    </div>
+
+    <!-- Menú usuario -->
+    <div id="userMenu" class="dropdown-menu" style="display:none;">
+        <a href="/Account/Profile">Perfil</a>
+        <a href="/Account/Logout">Cerrar sesión</a>
+    </div>
+
+    <script>
+        const cuentaBtn = document.querySelector('.register-btn');
+        const authPopup = document.getElementById('authPopup');
+        const overlay = document.getElementById('overlay');
+        const userMenu = document.getElementById('userMenu');
+        const toggleLink = document.getElementById('toggleForm');
+        const popupTitle = document.getElementById('popupTitle');
+        const card = document.querySelector('.card');
+        const isLoggedIn = @isLoggedIn.ToString().ToLower() === "true";
+
+        // Abrir popup
+        cuentaBtn.addEventListener('click', e => {
+            e.preventDefault();
+            if (!isLoggedIn) {
+                authPopup.classList.add('show');
+                overlay.classList.add('show');
+            } else {
+                userMenu.style.display = userMenu.style.display === 'block' ? 'none' : 'block';
+            }
+        });
+
+        // Cerrar popup
+        function cerrarPopup() {
+            authPopup.classList.remove('show');
+            overlay.classList.remove('show');
+            card.classList.remove('flipped');
+            popupTitle.textContent = 'Inicia sesión';
+            toggleLink.textContent = '¿No tienes cuenta? Registrate';
+        }
+
+        // Alternar login/registro
+              const cardContainer = document.querySelector('.card-container'); // definirlo
+
+        toggleLink.addEventListener('click', e => {
+            e.preventDefault();
+            card.classList.toggle('flipped');
+
+            if (card.classList.contains('flipped')) {
+                popupTitle.textContent = 'Registro';
+                toggleLink.textContent = '¿Ya tienes cuenta? Inicia sesión';
+                // asignar height con !important
+                cardContainer.style.setProperty('height', '350px', 'important');
+            } else {
+                popupTitle.textContent = 'Inicia sesión';
+                toggleLink.textContent = '¿No tienes cuenta? Registrate';
+                cardContainer.style.setProperty('height', '220px', 'important');
+            }
+        });
+
+
+        // Cerrar menú si clic afuera
+        document.addEventListener('click', e => {
+            if (!userMenu.contains(e.target) && !cuentaBtn.contains(e.target)) {
+                userMenu.style.display = 'none';
+            }
+        });
+
+        // Cerrar popup si clic sobre overlay
+        overlay.addEventListener('click', cerrarPopup);
+    </script>
+
 </body>
 </html>
