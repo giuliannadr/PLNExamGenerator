@@ -118,7 +118,7 @@ body.bg-gradient {
     display: flex;
     justify-content: center;
     align-items: center;
-    max-width: 410px; /* 5px más que upload-box */
+    max-width: 465px; /* 5px más que upload-box */
     margin: 0 auto; /* centra upload en la página */
     margin-top: 2rem;
 }
@@ -128,7 +128,8 @@ body.bg-gradient {
     border: 2px dashed #4dabf7;
     border-radius: 16px;
     background: #2549A6;
-    max-width: 400px;
+ 
+    min-width: 450px;
     margin-left: auto;
     margin-right: auto;
     transition: box-shadow .3s;
@@ -156,6 +157,8 @@ body.bg-gradient {
     border-radius: 25px;
     cursor: pointer;
     font-weight: bold;
+    width: 165px;
+    height: 45px;
 }
 
     .upload-btn:hover {
