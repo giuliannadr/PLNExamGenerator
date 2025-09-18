@@ -1,6 +1,6 @@
 ﻿@{
     Layout = null;
-    bool isLoggedIn = true;
+    bool isLoggedIn = User.Identity.IsAuthenticated;
 }
 <!DOCTYPE html>
 <html lang="es">
@@ -39,12 +39,13 @@
         <h3 id="popupTitle">Inicia sesión</h3>
         <div class="card-container">
             <div class="card">
-                <form id="loginForm" class="card-face front" action="/Account/Login" method="post">
+                <form id="loginForm" class="card-face front">
                     <input type="email" name="email" placeholder="Email" />
                     <input type="password" name="pass" placeholder="Contraseña" />
                     <button type="submit" class="submit-btn">Ingresar</button>
                 </form>
-                <form id="registerForm" class="card-face back" action="/Account/Register" method="post">
+
+                <form id="registerForm" class="card-face back">
                     <input type="text" name="name" placeholder="Nombre completo" />
                     <input type="email" name="email" placeholder="Email" />
                     <input type="password" name="pass" placeholder="Contraseña" />
@@ -70,12 +71,38 @@
         const toggleLink = document.getElementById('toggleForm');
         const popupTitle = document.getElementById('popupTitle');
         const card = document.querySelector('.card');
+        const cardContainer = document.querySelector('.card-container');
+        const loginForm = document.getElementById('loginForm');
+        const registerForm = document.getElementById('registerForm');
         const isLoggedIn = @isLoggedIn.ToString().ToLower() === "true";
+
+        // Función para enviar formularios con fetch (AJAX)
+        function enviarFormulario(form, url) {
+            form.addEventListener('submit', function(e){
+                e.preventDefault();
+                const data = new FormData(this);
+                fetch(url, { method: 'POST', body: data })
+                    .then(res => res.json())
+                    .then(resp => {
+                        if(resp.success){
+                            popupTitle.textContent = resp.mensaje;
+                            authPopup.classList.remove('show');
+                            overlay.classList.remove('show');
+                            // Aquí podés actualizar botones, mostrar nombre de usuario, etc.
+                        } else {
+                            alert(resp.mensaje);
+                        }
+                    });
+            });
+        }
+
+        enviarFormulario(loginForm, '/Account/Login');
+        enviarFormulario(registerForm, '/Account/Register');
 
         // Abrir popup
         cuentaBtn.addEventListener('click', e => {
             e.preventDefault();
-            if (!isLoggedIn) {
+            if(!isLoggedIn){
                 authPopup.classList.add('show');
                 overlay.classList.add('show');
             } else {
@@ -93,35 +120,27 @@
         }
 
         // Alternar login/registro
-              const cardContainer = document.querySelector('.card-container'); // definirlo
-
         toggleLink.addEventListener('click', e => {
             e.preventDefault();
             card.classList.toggle('flipped');
-
-            if (card.classList.contains('flipped')) {
+            if(card.classList.contains('flipped')){
                 popupTitle.textContent = 'Registro';
                 toggleLink.textContent = '¿Ya tienes cuenta? Inicia sesión';
-                // asignar height con !important
-                cardContainer.style.setProperty('height', '350px', 'important');
+                cardContainer.style.setProperty('height','350px','important');
             } else {
                 popupTitle.textContent = 'Inicia sesión';
                 toggleLink.textContent = '¿No tienes cuenta? Registrate';
-                cardContainer.style.setProperty('height', '220px', 'important');
+                cardContainer.style.setProperty('height','220px','important');
             }
         });
-
 
         // Cerrar menú si clic afuera
-        document.addEventListener('click', e => {
-            if (!userMenu.contains(e.target) && !cuentaBtn.contains(e.target)) {
-                userMenu.style.display = 'none';
+        document.addEventListener('click', e=>{
+            if(!userMenu.contains(e.target) && !cuentaBtn.contains(e.target)){
+                userMenu.style.display='none';
             }
         });
-
-        // Cerrar popup si clic sobre overlay
         overlay.addEventListener('click', cerrarPopup);
     </script>
-
 </body>
 </html>
