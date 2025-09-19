@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using PNLExamGenerator.Models; // tus modelos (por ejemplo Usuario)
+using PNLExamGenerator.Models; 
+using PNLExamGenerator.Services;
 
 
 namespace PNLExamGenerator.Controllers
@@ -8,22 +9,28 @@ namespace PNLExamGenerator.Controllers
     public class AccountController : Controller
     {
         private readonly ILogger<AccountController> _logger;
+        private readonly IUsuarioService _usuarioService;
 
-        public AccountController(ILogger<AccountController> logger)
+
+
+        public AccountController(ILogger<AccountController> logger, IUsuarioService usuarioService)
         {
             _logger = logger;
+            _usuarioService = usuarioService;
         }
 
         [HttpPost]
+       // [ValidateAntiForgeryToken]
         public IActionResult Login(string email, string pass)
         {
             // Simulando validación
-            bool exito = (email == "test@test.com" && pass == "1234");
+            bool exito = _usuarioService.Login(email,pass);
 
             if (exito)
             {
-                // Aquí podrías iniciar sesión con cookies o claims
-                return Json(new { success = true, mensaje = "Bienvenido" });
+                var usuario = _usuarioService.GetUsuarioByEmail(email);
+                HttpContext.Session.SetString("NombreUsuario", usuario.Nombre);
+                return Json(new { success = true, mensaje = "Bienvenido", nombre = usuario.Nombre });
             }
             else
             {
@@ -32,15 +39,26 @@ namespace PNLExamGenerator.Controllers
         }
 
         [HttpPost]
+       // [ValidateAntiForgeryToken]
         public IActionResult Register(string name, string email, string pass, string confirmPass)
         {
-            if (pass != confirmPass)
-                return Json(new { success = false, mensaje = "Las contraseñas no coinciden" });
+            try
+            {
+                if (pass != confirmPass)
+                    return Json(new { success = false, mensaje = "Las contraseñas no coinciden" });
 
-            // Aquí podrías guardar el usuario en DB
+                _usuarioService.Register(new Usuario { Nombre = name, Email = email, Password = pass });
+                HttpContext.Session.SetString("NombreUsuario", name);
 
-            return Json(new { success = true, mensaje = $"Usuario {name} registrado" });
-        }
+                return Json(new { success = true, mensaje = $"Usuario {name} registrado", nombre = name });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error en Register");
+                return Json(new { success = false, mensaje = "Ocurrió un error al registrarse" });
+            }
+        
+    }
 
     }
 

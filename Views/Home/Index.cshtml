@@ -1,9 +1,17 @@
 ﻿@{
     ViewBag.Title = "Inicio";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var nombreUsuario = Context.Session.GetString("NombreUsuario");
 }
 
 <section class="hero">
+    @if (!string.IsNullOrEmpty(nombreUsuario))
+    {
+        <div class="saludo-container">
+            <p class="bienvenida">¡Hola, @nombreUsuario!</p>
+        </div>
+    }
+
     <h1 class="title">¿QUÉ ESTUDIAMOS HOY?</h1>
     <p class="subtitle">Subí el material y prepará tu examen.</p>
 

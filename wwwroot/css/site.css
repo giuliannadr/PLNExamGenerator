@@ -61,6 +61,7 @@ body.bg-gradient {
     padding: 8px 20px;
     color: white;
     font-size: 1rem !important;
+    gap: 15px !important;
 }
 .plus-btn {
     display: inline-flex; /* permite alinear texto e icono con flex */
@@ -84,6 +85,12 @@ body.bg-gradient {
         height: 20px;
         margin-bottom: 4px;
     }
+    .register-btn svg {
+        width: 20px;
+        height: 20px;
+        margin-bottom: 4px;
+        margin-right: 10px;
+    }
 
 .plus-btn:hover, .register-btn:hover {
     background: rgba(255,255,255,0.1);
@@ -97,9 +104,14 @@ body.bg-gradient {
 }
 
 .hero {
-    text-align: center;
-    margin-top: 8rem;
+    display: flex;
+    flex-direction: column; /* obliga a los elementos a apilarse verticalmente */
+    align-items: center; /* centra horizontalmente */
+    text-align: center; /* centra el texto dentro de cada elemento */
+    margin-top: 6rem; /* espacio desde el top */
+    gap: 1rem; /* espacio entre saludo y título */
 }
+
 
     .hero .title {
         font-size: 3rem;
@@ -202,7 +214,7 @@ body.bg-gradient {
     background: #1A1A1F; /* fondo gris oscuro */
     padding: 3rem 2rem 2rem 2rem;
     border-radius: 25px;
-    box-shadow: 0 12px 35px rgba(0,0,0,0.7);
+    box-shadow: 0 5px 20px white;
     color: #fff;
     font-family: 'Istok Web', sans-serif;
     z-index: 1000;
@@ -357,3 +369,17 @@ body.bg-gradient {
     margin-bottom: 1rem;
     color: #BEC4FA;
 }
+
+.saludo-container {
+    margin-bottom: 1rem; /* espacio con el título */
+}
+
+.bienvenida {
+    font-size: 2rem; /* tamaño grande, pero no exagerado */
+    font-weight: lighter;
+    color: #4dabf7; /* azul brillante */
+    text-shadow: 1px 1px 5px rgba(0,0,0,0.5); /* sombra suave para destacar */
+    font-family: 'Istok Web', sans-serif;
+    margin: 0;
+}
+

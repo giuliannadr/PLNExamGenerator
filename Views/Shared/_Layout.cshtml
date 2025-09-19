@@ -18,8 +18,8 @@
                 <span class="brand">ExamGenerator</span>
             </div>
             <nav class="nav-actions">
-                <a class="plus-btn" href="#">Plus <span><!-- svg aquí --></span></a>
-                <a class="register-btn" href="#">Mi Cuenta</a>
+                <a class="plus-btn" href="#">Plus <span><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><path fill="none" stroke="#BEC4FA" stroke-width="2" d="M12 18V8zm0 5c6.075 0 11-4.925 11-11S18.075 1 12 1S1 5.925 1 12s4.925 11 11 11Zm5-11l-5-5l-5 5" /></svg></span></a>
+                <a class="register-btn" href="#"><span><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><path fill="#FFFFFF" d="M12 2a5 5 0 1 1-5 5l.005-.217A5 5 0 0 1 12 2m2 12a5 5 0 0 1 5 5v1a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-1a5 5 0 0 1 5-5z" /></svg></span>Mi Cuenta</a>
             </nav>
         </div>
     </header>
@@ -28,24 +28,24 @@
         @RenderBody()
     </main>
 
-
-
-    <!-- Overlay -->
+     <!-- Overlay -->
     <div id="overlay" class="overlay"></div>
 
     <!-- Popup login/registro -->
     <div id="authPopup" class="popup">
-        <button class="close-btn" onclick="cerrarPopup()">✕</button>
+        <button class="close-btn">✕</button>
         <h3 id="popupTitle">Inicia sesión</h3>
         <div class="card-container">
             <div class="card">
                 <form id="loginForm" class="card-face front">
+                    @Html.AntiForgeryToken()
                     <input type="email" name="email" placeholder="Email" />
                     <input type="password" name="pass" placeholder="Contraseña" />
                     <button type="submit" class="submit-btn">Ingresar</button>
                 </form>
 
                 <form id="registerForm" class="card-face back">
+                    @Html.AntiForgeryToken()
                     <input type="text" name="name" placeholder="Nombre completo" />
                     <input type="email" name="email" placeholder="Email" />
                     <input type="password" name="pass" placeholder="Contraseña" />
@@ -54,7 +54,7 @@
                 </form>
             </div>
         </div>
-        <a href="#" id="toggleForm" class="register-link">¿No tienes cuenta? Registrate</a>
+        <a href="#" id="toggleForm">¿No tienes cuenta? Registrate</a>
     </div>
 
     <!-- Menú usuario -->
@@ -74,32 +74,11 @@
         const cardContainer = document.querySelector('.card-container');
         const loginForm = document.getElementById('loginForm');
         const registerForm = document.getElementById('registerForm');
+
+        // Convertir Razor bool a JS
         const isLoggedIn = @isLoggedIn.ToString().ToLower() === "true";
 
-        // Función para enviar formularios con fetch (AJAX)
-        function enviarFormulario(form, url) {
-            form.addEventListener('submit', function(e){
-                e.preventDefault();
-                const data = new FormData(this);
-                fetch(url, { method: 'POST', body: data })
-                    .then(res => res.json())
-                    .then(resp => {
-                        if(resp.success){
-                            popupTitle.textContent = resp.mensaje;
-                            authPopup.classList.remove('show');
-                            overlay.classList.remove('show');
-                            // Aquí podés actualizar botones, mostrar nombre de usuario, etc.
-                        } else {
-                            alert(resp.mensaje);
-                        }
-                    });
-            });
-        }
-
-        enviarFormulario(loginForm, '/Account/Login');
-        enviarFormulario(registerForm, '/Account/Register');
-
-        // Abrir popup
+        // Mostrar popup
         cuentaBtn.addEventListener('click', e => {
             e.preventDefault();
             if(!isLoggedIn){
@@ -118,6 +97,8 @@
             popupTitle.textContent = 'Inicia sesión';
             toggleLink.textContent = '¿No tienes cuenta? Registrate';
         }
+        overlay.addEventListener('click', cerrarPopup);
+        authPopup.querySelector('.close-btn').addEventListener('click', cerrarPopup);
 
         // Alternar login/registro
         toggleLink.addEventListener('click', e => {
@@ -126,21 +107,78 @@
             if(card.classList.contains('flipped')){
                 popupTitle.textContent = 'Registro';
                 toggleLink.textContent = '¿Ya tienes cuenta? Inicia sesión';
-                cardContainer.style.setProperty('height','350px','important');
+                cardContainer.style.height = '350px';
             } else {
                 popupTitle.textContent = 'Inicia sesión';
                 toggleLink.textContent = '¿No tienes cuenta? Registrate';
-                cardContainer.style.setProperty('height','220px','important');
+                cardContainer.style.height = '220px';
             }
         });
 
+        // Función AJAX genérica con loader
+        function ajaxForm(form, url){
+            form.addEventListener('submit', e => {
+                e.preventDefault();
+
+                const submitBtn = form.querySelector('button[type="submit"]');
+                const originalText = submitBtn.textContent;
+
+                // Deshabilitar botón y mostrar loader
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'Cargando...';
+
+                const data = new FormData(form);
+                const token = form.querySelector('input[name="__RequestVerificationToken"]')?.value;
+                if(token) data.append('__RequestVerificationToken', token);
+
+                fetch(url, { method:'POST', body:data })
+                .then(r => {
+                    if(!r.ok) throw new Error('HTTP ' + r.status);
+                    return r.json();
+                })
+                .then(resp => {
+                    if(resp.success){
+                        // Saludo dinámico
+                        const nombre = resp.nombre;
+                        let bienvenida = document.querySelector('.bienvenida');
+                        if(bienvenida){
+                            bienvenida.textContent = `¡Hola ${nombre}!`;
+                        } else {
+                            const p = document.createElement('p');
+                            p.className = 'bienvenida';
+                            p.textContent = `¡Hola ${nombre}!`;
+                            document.querySelector('.hero').prepend(p);
+                        }
+
+                        cerrarPopup();
+                        form.reset();
+                    } else {
+                        alert(resp.mensaje);
+                    }
+                })
+                .catch(err => {
+                    console.error(err);
+                    alert('Error en el servidor: ' + err.message);
+                })
+                .finally(() => {
+                    // Restaurar botón
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = originalText;
+                });
+            });
+        }
+
+        ajaxForm(loginForm, '/Account/Login');
+        ajaxForm(registerForm, '/Account/Register');
+
         // Cerrar menú si clic afuera
-        document.addEventListener('click', e=>{
+        document.addEventListener('click', e => {
             if(!userMenu.contains(e.target) && !cuentaBtn.contains(e.target)){
-                userMenu.style.display='none';
+                userMenu.style.display = 'none';
             }
         });
-        overlay.addEventListener('click', cerrarPopup);
     </script>
+
+
 </body>
 </html>
