@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Logging;
 using PNLExamGenerator.Models; 
 using PNLExamGenerator.Services;
-
+using PLNExamGenerator.Entidades;
 
 namespace PNLExamGenerator.Controllers
 {
