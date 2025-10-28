@@ -1,0 +1,45 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36414.22
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PNLExamGenerator", "PNLExamGenerator.csproj", "{BA4A0563-BF4F-4035-96CD-ED8677F8B530}"
+	ProjectSection(ProjectDependencies) = postProject
+		{EE948171-5A9F-4A9E-9CE2-72443F2281ED} = {EE948171-5A9F-4A9E-9CE2-72443F2281ED}
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Elementos de la solución", "Elementos de la solución", "{D107F4C8-89CC-BEA8-D3D7-CA6B7733353D}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PNLExamGenerator.Entidades", "..\PLNExamGenerator.Entidades\PNLExamGenerator.Entidades.csproj", "{EE948171-5A9F-4A9E-9CE2-72443F2281ED}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PNLExamGenerator.Logica", "..\PLNExamGenerator.Logica\PNLExamGenerator.Logica.csproj", "{2B566871-8A08-4027-A7B8-6436605C58DB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BA4A0563-BF4F-4035-96CD-ED8677F8B530}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BA4A0563-BF4F-4035-96CD-ED8677F8B530}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BA4A0563-BF4F-4035-96CD-ED8677F8B530}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BA4A0563-BF4F-4035-96CD-ED8677F8B530}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EE948171-5A9F-4A9E-9CE2-72443F2281ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EE948171-5A9F-4A9E-9CE2-72443F2281ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EE948171-5A9F-4A9E-9CE2-72443F2281ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EE948171-5A9F-4A9E-9CE2-72443F2281ED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2B566871-8A08-4027-A7B8-6436605C58DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2B566871-8A08-4027-A7B8-6436605C58DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2B566871-8A08-4027-A7B8-6436605C58DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2B566871-8A08-4027-A7B8-6436605C58DB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {8CD123E6-197B-495F-BD31-623C7F7FB2B5}
+	EndGlobalSection
+EndGlobal

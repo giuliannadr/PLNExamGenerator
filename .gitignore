@@ -1,12 +1,8 @@
-# Carpetas de compilación
-bin/
-obj/
 
-# Archivos de usuario de Visual Studio
-*.user
-*.suo
+
+
 *.vscode/
-*.vs/
+
 
 # Rider
 .idea/
@@ -14,3 +10,23 @@ obj/
 # Windows
 Thumbs.db
 Desktop.ini
+
+Build
+bin/
+obj/
+[Bb]uild/
+[Ll]ogs/
+
+VS
+.vs/
+*.user
+*.suo
+
+Otros
+*.DotSettings.user
+*.DS_Store
+
+Permitimos nuestros proyectos
+!PLNExamGenerator/
+!PLNExamGenerator.Logica/
+!PLNExamGenerator.Entidades/**
