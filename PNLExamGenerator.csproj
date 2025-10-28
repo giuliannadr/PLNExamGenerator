@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\PLNExamGenerator.Entidades\PNLExamGenerator.Entidades.csproj" />
+    <ProjectReference Include="src\PLNExamGenerator.Entidades\PNLExamGenerator.Entidades.csproj" />
   </ItemGroup>
 
 </Project>

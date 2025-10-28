@@ -1,22 +1,22 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using PNLExamGenerator.Models; 
-using PNLExamGenerator.Services;
-using PLNExamGenerator.Entidades;
+
+using PNLExamGenerator.Logica;
 
 namespace PNLExamGenerator.Controllers
 {
     public class AccountController : Controller
     {
         private readonly ILogger<AccountController> _logger;
-        private readonly IUsuarioService _usuarioService;
+        private readonly IUsuarioLogica _usuarioLogica;
 
 
 
-        public AccountController(ILogger<AccountController> logger, IUsuarioService usuarioService)
+        public AccountController(ILogger<AccountController> logger, UsuarioLogica usuarioLogica)
         {
             _logger = logger;
-            _usuarioService = usuarioService;
+            _usuarioLogica = usuarioLogica;
         }
 
         [HttpPost]
